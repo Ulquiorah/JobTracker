@@ -1,6 +1,26 @@
-/* ================================
-   CSS RESET
-   ================================ */
+/* ========================================
+   VARIABLES
+======================================== */
+
+:root {
+  --bg: #10181f;
+  --surface: #1a2530;
+  --surface-raised: #212e3b;
+  --border: #2b3946;
+
+  --text: #edece6;
+  --text-muted: #8b96a3;
+
+  --accent: #e3a438;
+  --accent-soft: rgba(227, 164, 56, 0.14);
+
+  --radius: 10px;
+}
+
+
+/* ========================================
+   RESET
+======================================== */
 
 *,
 *::before,
@@ -16,35 +36,27 @@ html {
 
 body {
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Public Sans", sans-serif;
+  font-size: 15px;
   line-height: 1.5;
+
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-img,
-picture,
-video,
-canvas,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-input,
 button,
+input,
 textarea,
 select {
   font: inherit;
 }
 
-button,
-a {
-  cursor: pointer;
-}
-
 button {
   border: 0;
   background: none;
+  cursor: pointer;
 }
 
 a {
@@ -52,31 +64,176 @@ a {
   text-decoration: none;
 }
 
-ul,
-ol {
-  list-style: none;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: inherit;
-  font-weight: inherit;
-}
-
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  overflow-wrap: break-word;
+img,
+svg {
+  display: block;
 }
 
 #root {
   min-height: 100vh;
+}
+
+
+/* ========================================
+   APP LAYOUT
+======================================== */
+
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+
+/* ========================================
+   SIDEBAR
+======================================== */
+
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+
+  padding: 28px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+
+/* ========================================
+   LOGO
+======================================== */
+
+.logo {
+  display: block;
+
+  font-family: "Fraunces", serif;
+  font-size: 21px;
+  font-weight: 500;
+
+  letter-spacing: -0.01em;
+
+  color: var(--text);
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+
+/* ========================================
+   NAVIGATION
+======================================== */
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 9px 10px;
+
+  border-radius: 8px;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.nav-item svg {
+  width: 16px;
+  height: 16px;
+
+  flex-shrink: 0;
+}
+
+
+/* Hover */
+
+.nav-item:hover {
+  color: var(--text);
+  background: var(--surface-raised);
+}
+
+
+/* Active */
+
+.nav-item.active {
+  color: var(--text);
+  background: var(--accent-soft);
+}
+
+.nav-item.active svg {
+  color: var(--accent);
+}
+
+
+/* ========================================
+   SIDEBAR FOOTER
+======================================== */
+
+.sidebar-footer {
+  margin-top: auto;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid var(--border);
+}
+
+
+/* Avatar */
+
+.avatar {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 50%;
+
+  background: var(--accent);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  flex-shrink: 0;
+}
+
+
+/* User information */
+.user__information {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-footer .name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sidebar-footer .role {
+  font-size: 12px;
+  color: var(--text-muted);
 }

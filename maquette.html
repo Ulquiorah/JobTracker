@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobTracker — Tableau de bord</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #10181f;
+    --surface: #1a2530;
+    --surface-raised: #212e3b;
+    --border: #2b3946;
+    --text: #edece6;
+    --text-muted: #8b96a3;
+    --accent: #e3a438;
+    --accent-soft: rgba(227, 164, 56, 0.14);
+    --stage-postule: #7fa7d1;
+    --stage-entretien: #d19f5f;
+    --stage-offre: #6fbf8b;
+    --stage-refuse: #a17878;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Public Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+
+  .nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+  }
+  .nav a svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .nav a:hover { color: var(--text); background: var(--surface-raised); }
+  .nav a.active { color: var(--text); background: var(--accent-soft); }
+  .nav a.active svg { stroke: var(--accent); }
+
+  .sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--stage-postule);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: #0f1620;
+  }
+  .sidebar-footer .name { font-size: 13px; font-weight: 600; }
+  .sidebar-footer .role { font-size: 12px; color: var(--text-muted); }
+
+  /* ---------- Main ---------- */
+  .main { padding: 32px 40px 40px; display: flex; flex-direction: column; gap: 28px; }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .topbar h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    margin: 0 0 4px;
+  }
+  .topbar p { margin: 0; color: var(--text-muted); font-size: 14px; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #1a1204;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    height: fit-content;
+  }
+  .btn-primary:hover { background: #eeb355; }
+
+  /* ---------- Stat strip ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .stat-card .count {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .stat-card .label {
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .stat-card.postule .count { color: var(--stage-postule); }
+  .stat-card.entretien .count { color: var(--stage-entretien); }
+  .stat-card.offre .count { color: var(--stage-offre); }
+  .stat-card.refuse .count { color: var(--stage-refuse); }
+
+  /* ---------- Pipeline / Kanban ---------- */
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(240px, 1fr));
+    gap: 16px;
+    overflow-x: auto;
+  }
+
+  .column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .column-header .stage-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .column-header .stage-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--surface-raised);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .stage-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 7px;
+  }
+  .postule .stage-dot { background: var(--stage-postule); }
+  .entretien .stage-dot { background: var(--stage-entretien); }
+  .offre .stage-dot { background: var(--stage-offre); }
+  .refuse .stage-dot { background: var(--stage-refuse); }
+
+  .card-list { display: flex; flex-direction: column; gap: 10px; min-height: 40px; }
+
+  .job-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--stage-color, var(--accent));
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: grab;
+  }
+  .job-card:hover { border-color: var(--stage-color, var(--accent)); background: var(--surface-raised); }
+
+  .job-card .company {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  .job-card .role {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .job-card .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .job-card .date { }
+  .job-card .badge {
+    background: var(--surface-raised);
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-size: 11px;
+  }
+
+  .add-card {
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+    background: transparent;
+  }
+  .add-card:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .pipeline { grid-auto-flow: column; grid-auto-columns: 78vw; grid-template-columns: none; }
+    .main { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ---------- Sidebar ---------- -->
+  <aside class="sidebar">
+    <div class="logo">Job<span>Tracker</span></div>
+
+    <nav class="nav">
+      <a href="#" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Tableau de bord
+      </a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M11 19V4M18 19v-6"/></svg>
+        Statistiques
+      </a>
+      <a href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
+        Profil
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="avatar">G</div>
+      <div>
+        <div class="name">Gino</div>
+        <div class="role">Recherche active</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ---------- Main ---------- -->
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Bonjour Gino</h1>
+        <p>10 candidatures en cours de suivi cette semaine</p>
+      </div>
+      <button class="btn-primary">Nouvelle candidature</button>
+    </div>
+
+    <!-- Stat strip -->
+    <div class="stats">
+      <div class="stat-card postule">
+        <div class="count">4</div>
+        <div class="label">Postulé</div>
+      </div>
+      <div class="stat-card entretien">
+        <div class="count">2</div>
+        <div class="label">Entretien</div>
+      </div>
+      <div class="stat-card offre">
+        <div class="count">1</div>
+        <div class="label">Offre reçue</div>
+      </div>
+      <div class="stat-card refuse">
+        <div class="count">3</div>
+        <div class="label">Refusé</div>
+      </div>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="pipeline">
+
+      <section class="postule">
+        <div class="column-header">
+          <span class="stage-name"><span class="stage-dot"></span>Postulé</span>
+          <span class="stage-count">4</span>
+        </div>
+        <div class="card-list">
+          <div class="job-card" style="--stage-color: var(--stage-postule);">
+            <div class="company">Orange Digital Center</div>
+            <div class="role">Développeur front-end</div>
+            <div class="meta"><span class="date">Envoyé le 2 sept.</span><span class="badge">React</span></div>
+          </div>
+          <div class="job-card" style="--stage-color: var(--stage-postule);">
+            <div class="company">Yas</div>
+            <div class="role">Développeur WordPress</div>
+            <div class="meta"><span class="date">Envoyé le 4 sept.</span><span class="badge">PHP</span></div>
+          </div>
+          <div class="add-card">+ Ajouter une candidature</div>
+        </div>
+      </section>
+
+      <section class="entretien">
+        <div class="column-header">
+          <span class="stage-name"><span class="stage-dot"></span>Entretien</span>
+          <span class="stage-count">2</span>
+        </div>
+        <div class="card-list">
+          <div class="job-card" style="--stage-color: var(--stage-entretien);">
+            <div class="company">Sayna</div>
+            <div class="role">Développeur full-stack</div>
+            <div class="meta"><span class="date">Entretien le 12 sept.</span><span class="badge">Visio</span></div>
+          </div>
+          <div class="add-card">+ Ajouter une candidature</div>
+        </div>
+      </section>
+
+      <section class="offre">
+        <div class="column-header">
+          <span class="stage-name"><span class="stage-dot"></span>Offre</span>
+          <span class="stage-count">1</span>
+        </div>
+        <div class="card-list">
+          <div class="job-card" style="--stage-color: var(--stage-offre);">
+            <div class="company">Freelance — client agence</div>
+            <div class="role">Intégration Gutenberg</div>
+            <div class="meta"><span class="date">Reçue le 6 sept.</span><span class="badge">À répondre</span></div>
+          </div>
+          <div class="add-card">+ Ajouter une candidature</div>
+        </div>
+      </section>
+
+      <section class="refuse">
+        <div class="column-header">
+          <span class="stage-name"><span class="stage-dot"></span>Refusé</span>
+          <span class="stage-count">3</span>
+        </div>
+        <div class="card-list">
+          <div class="job-card" style="--stage-color: var(--stage-refuse);">
+            <div class="company">Jumia</div>
+            <div class="role">Développeur front-end</div>
+            <div class="meta"><span class="date">Réponse le 30 août</span><span class="badge">Archivé</span></div>
+          </div>
+          <div class="add-card">+ Ajouter une candidature</div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

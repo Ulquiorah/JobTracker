@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import SideBar from './components/sideBar'
+import './assets/style.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <h1>teste</h1>
+    <>
+      <SideBar />
+    </>
   )
 }
 
