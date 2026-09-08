@@ -43,7 +43,6 @@ export default function Sidebar() {
           <MdPersonOutline aria-hidden="true" />
           <span>Profil</span>
         </a>
-        {console.log(activeItem)}
       </nav>
 
       <div className="sidebar-footer">
