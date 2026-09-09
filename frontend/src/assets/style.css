@@ -13,10 +13,13 @@
 
   --accent: #e3a438;
   --accent-soft: rgba(227, 164, 56, 0.14);
+  --stage-postule: #7fa7d1;
+  --stage-entretien: #d19f5f;
+  --stage-offre: #6fbf8b;
+  --stage-refuse: #a17878;
 
   --radius: 10px;
 }
-
 
 /* ========================================
    RESET
@@ -73,7 +76,6 @@ svg {
   min-height: 100vh;
 }
 
-
 /* ========================================
    APP LAYOUT
 ======================================== */
@@ -83,7 +85,6 @@ svg {
   grid-template-columns: 240px 1fr;
   min-height: 100vh;
 }
-
 
 /* ========================================
    SIDEBAR
@@ -102,7 +103,6 @@ svg {
   flex-direction: column;
   gap: 32px;
 }
-
 
 /* ========================================
    LOGO
@@ -123,7 +123,6 @@ svg {
 .logo span {
   color: var(--accent);
 }
-
 
 /* ========================================
    NAVIGATION
@@ -162,14 +161,12 @@ svg {
   flex-shrink: 0;
 }
 
-
 /* Hover */
 
 .nav-item:hover {
   color: var(--text);
   background: var(--surface-raised);
 }
-
 
 /* Active */
 
@@ -181,7 +178,6 @@ svg {
 .nav-item.active svg {
   color: var(--accent);
 }
-
 
 /* ========================================
    SIDEBAR FOOTER
@@ -199,7 +195,6 @@ svg {
 
   border-top: 1px solid var(--border);
 }
-
 
 /* Avatar */
 
@@ -221,7 +216,6 @@ svg {
   flex-shrink: 0;
 }
 
-
 /* User information */
 .user__information {
   display: flex;
@@ -236,4 +230,170 @@ svg {
 .sidebar-footer .role {
   font-size: 12px;
   color: var(--text-muted);
+}
+
+/* ------ Pages ------------- */
+main {
+  margin: 12px 40px;
+}
+
+/* ===========================================
+                Dashboard
+============================================== */
+.head {
+  width: 100%;
+  height: 20vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+/* À la suite de .stat-card existant */
+.stat-card.postule .count {
+  color: var(--stage-postule);
+}
+.stat-card.entretien .count {
+  color: var(--stage-entretien);
+}
+.stat-card.offre .count {
+  color: var(--stage-offre);
+}
+.stat-card.refuse .count {
+  color: var(--stage-refuse);
+}
+
+.head {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #1a1204;
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  height: fit-content;
+}
+.btn-primary:hover {
+  background: #eeb355;
+}
+
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
+  gap: 16px;
+  overflow-x: auto;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.column-header .stage-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+.column-header .stage-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.stage-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+.postule .stage-dot {
+  background: var(--stage-postule);
+}
+.entretien .stage-dot {
+  background: var(--stage-entretien);
+}
+.offre .stage-dot {
+  background: var(--stage-offre);
+}
+.refuse .stage-dot {
+  background: var(--stage-refuse);
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 40px;
+}
+
+.job-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--stage-color, var(--accent));
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: grab;
+}
+.job-card:hover {
+  border-color: var(--stage-color, var(--accent));
+  background: var(--surface-raised);
+}
+.job-card .company {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+.job-card .role {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.job-card .meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.job-card .badge {
+  background: var(--surface-raised);
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-size: 11px;
+}
+
+.add-card {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
+  background: transparent;
+}
+.add-card:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }

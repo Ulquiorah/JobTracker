@@ -1,12 +1,20 @@
-import SideBar from './components/sideBar'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './assets/style.css'
+import Sidebar from "./components/sidebar";
+import Dashboard from "./pages/Dashboard";
 
-function App() {
+export default function App() {
   return (
-    <>
-      <SideBar />
-    </>
-  )
-}
+    <BrowserRouter>
+      <div className="app">
+        <Sidebar />
 
-export default App
+        <main className="main">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
+}
