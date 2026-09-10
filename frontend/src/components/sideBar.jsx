@@ -31,7 +31,7 @@ export default function Sidebar() {
         </NavLink>
 
         <NavLink
-          to="/profile"
+          to="/profil"
           className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
         >
           <MdPersonOutline aria-hidden="true" />
