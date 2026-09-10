@@ -82,7 +82,7 @@ svg {
 
 .app {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 240px minmax(0, 1fr); /* minmax(0, 1fr) empêche la colonne de contenu de forcer un débordement de page */
   min-height: 100vh;
 }
 
@@ -235,6 +235,8 @@ svg {
 /* ------ Pages ------------- */
 main {
   margin: 12px 40px;
+  max-width: 1600px; /* plafond raisonnable sur très grands écrans */
+  margin-inline: auto;
 }
 
 /* ===========================================
@@ -420,14 +422,21 @@ statistiques
   color: var(--text);
 }
 
-.line-chart { width: 100%; height: 140px; }
+.line-chart {
+  width: 100%;
+  height: 140px;
+}
 
 .donut-wrap {
   display: flex;
   align-items: center;
   gap: 24px;
 }
-.donut-chart { width: 140px; height: 140px; flex-shrink: 0; }
+.donut-chart {
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+}
 
 .donut-legend {
   list-style: none;
@@ -437,9 +446,14 @@ statistiques
   font-size: 13px;
   color: var(--text-muted);
 }
-.donut-legend li { display: flex; align-items: center; gap: 8px; }
+.donut-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .donut-legend .dot {
-  width: 8px; height: 8px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -516,7 +530,9 @@ statistiques
   color: var(--text);
   font-size: 13px;
 }
-.tag-input input:focus { outline: none; }
+.tag-input input:focus {
+  outline: none;
+}
 
 .tag {
   display: flex;
@@ -543,7 +559,10 @@ statistiques
   font-size: 13px;
   font-weight: 600;
 }
-.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
 .gmail-connect {
   display: flex;
@@ -553,7 +572,127 @@ statistiques
   border-radius: 8px;
   padding: 12px 14px;
 }
+/* ========================================
+   RESPONSIVE — TABLETTE (≤ 1250px)
+======================================== */
+@media (max-width: 1250px) {
+  main {
+    margin: 12px 60px;
+  }
+  .pipeline {
+  margin-top: 20px;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+}
+}
 
+@media (max-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .pipeline {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+}
+
+/* ========================================
+   RESPONSIVE — SIDEBAR EN TOP BAR (≤ 860px)
+======================================== */
 @media (max-width: 860px) {
-  .profile-grid { grid-template-columns: 1fr; }
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .nav {
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  .sidebar-footer {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  main {
+    margin: 12px 20px;
+  }
+
+  .head {
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   RESPONSIVE — MOBILE (≤ 640px)
+======================================== */
+@media (max-width: 640px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .pipeline {
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .donut-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .chart-card {
+    padding: 14px;
+  }
+}
+@media (max-width: 562px) {
+  .sidebar {
+    padding: 10px 14px;
+  }
+
+  .nav-item span {
+    display: none;
+  }
+
+  .nav-item {
+    padding: 9px;
+  }
+
+  .sidebar-footer .user__information {
+    display: none;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
 }
