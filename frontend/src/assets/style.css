@@ -573,7 +573,7 @@ statistiques
   padding: 12px 14px;
 }
 /* ========================================
-   RESPONSIVE — TABLETTE (≤ 1250px)
+   RESPONSIVE (≤ 1250px)
 ======================================== */
 @media (max-width: 1250px) {
   main {
@@ -584,7 +584,11 @@ statistiques
   grid-template-columns: repeat(2, minmax(240px, 1fr));
 }
 }
-
+@media (max-width: 1017px) {
+  .profile-grid {
+  grid-template-columns: 1fr;
+}
+}
 @media (max-width: 1024px) {
   .stats {
     grid-template-columns: repeat(2, 1fr);
